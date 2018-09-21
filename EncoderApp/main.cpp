@@ -2,8 +2,6 @@
 #include <string>
 
 #include "dictionary.h"
-#include "encoder.h"
-#include "decoder.h"
 
 int main()
 {
@@ -18,9 +16,11 @@ int main()
         } catch (QException &exception) {
             qDebug() << exception.what();
         }
-        std::cout<<"asd\n";
     } while(dict->getDictionaryToEncode()->isEmpty());
-
-
+    QString tmp;
+    tmp = dict->encode("acf");
+    std::cout<<tmp.toStdString()<<std::endl;
+    tmp = dict->decode(tmp);
+    std::cout<<tmp.toStdString()<<std::endl;
     return 0;
 }

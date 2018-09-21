@@ -13,7 +13,8 @@ public:
     ~Dictionary();
     QJsonDocument *getDictionaryToEncode() const;
     QJsonDocument *getDictionaryToDecode() const;
-
+    QString encode(QString input);
+    QString decode(QString input);
 };
 
 #endif // DICTIONARY_H

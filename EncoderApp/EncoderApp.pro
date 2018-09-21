@@ -8,11 +8,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    encoder.cpp \
-    decoder.cpp \
     dictionary.cpp
 
 HEADERS += \
-    encoder.h \
-    decoder.h \
     dictionary.h
