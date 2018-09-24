@@ -8,7 +8,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    dictionary.cpp
+    dictionary.cpp \
+    menu.cpp
 
 HEADERS += \
-    dictionary.h
+    dictionary.h \
+    menu.h

@@ -15,6 +15,8 @@ public:
     QJsonDocument *getDictionaryToDecode() const;
     QString encode(QString input);
     QString decode(QString input);
+    void encode(QString in, QString out);
+    void decode(QString in, QString out);
 };
 
 #endif // DICTIONARY_H

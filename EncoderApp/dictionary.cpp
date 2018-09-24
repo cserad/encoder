@@ -78,3 +78,25 @@ QString Dictionary::decode(QString input)
         return QString();
     }
 }
+
+void Dictionary::encode(QString in, QString out)
+{
+    QFile inFile(in);
+    QTextStream inputStream(&inFile);
+    QString input = inputStream.readAll();
+    QString output = encode(input);
+    QFile outFile(out);
+    QTextStream outputStream(&outFile);
+    outputStream << output;
+}
+
+void Dictionary::decode(QString in, QString out)
+{
+    QFile inFile(in);
+    QTextStream inputStream(&inFile);
+    QString input = inputStream.readAll();
+    QString output = decode(input);
+    QFile outFile(out);
+    QTextStream outputStream(&outFile);
+    outputStream << output;
+}
