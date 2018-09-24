@@ -5,7 +5,7 @@ Dictionary::Dictionary(QString path)
     try {
         QFile dictFile(path);
         if (!dictFile.open(QFile::ReadOnly)) {
-            qDebug() << "Couldn't open file.";
+            qDebug() << QStringLiteral("Couldn't open file.");
         }
 
         QByteArray dictData = dictFile.readAll();
@@ -13,7 +13,6 @@ Dictionary::Dictionary(QString path)
     } catch (QException &exception) {
         qDebug() << exception.what();
     }
-
     //Make the dictionary to decode
     QJsonObject dictToEncodeObject = dictionaryToEncode->object();
     QJsonObject *dictToDecodeObject = new QJsonObject();
@@ -47,6 +46,8 @@ QJsonDocument *Dictionary::getDictionaryToDecode() const
 QString Dictionary::encode(QString input)
 {
     QString output;
+    input = input.toLower();
+
     for (const auto &i : input) {
         QString actual(i);
         QJsonValue value = dictionaryToEncode->object().value(actual);
@@ -63,6 +64,7 @@ QString Dictionary::decode(QString input)
 {
     QString output;
     QString actual;
+    input = input.toLower();
 
     for (const auto &i : input) {
         actual.append(i);
@@ -72,6 +74,7 @@ QString Dictionary::decode(QString input)
             actual.clear();
         }
     }
+
     if (actual.isEmpty()) {
         return output;
     } else {
@@ -83,14 +86,16 @@ void Dictionary::encode(QString in, QString out)
 {
     QFile inFile(in);
     if (!inFile.open(QFile::ReadOnly)) {
-        qDebug() << "Couldn't open file.";
+        qDebug() << QStringLiteral("Couldn't open file.");
     }
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
+
     QString output = encode(input.trimmed());
+
     QFile outFile(out);
     if (!outFile.open(QFile::WriteOnly)) {
-        qDebug() << "Couldn't open file.";
+        qDebug() << QStringLiteral("Couldn't open file.");
     }
     QTextStream outputStream(&outFile);
     outputStream << output;
@@ -100,14 +105,16 @@ void Dictionary::decode(QString in, QString out)
 {
     QFile inFile(in);
     if (!inFile.open(QFile::ReadOnly)) {
-        qDebug() << "Couldn't open file.";
+        qDebug() << QStringLiteral("Couldn't open file.");
     }
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
+
     QString output = decode(input.trimmed());
+
     QFile outFile(out);
     if (!outFile.open(QFile::WriteOnly)) {
-        qDebug() << "Couldn't open file.";
+        qDebug() << QStringLiteral("Couldn't open file.");
     }
     QTextStream outputStream(&outFile);
     outputStream << output;

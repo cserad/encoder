@@ -2,9 +2,11 @@
 
 Menu::Menu()
 {
-    do {
+    while(dict->getDictionaryToEncode()->isEmpty()) {
         QString path;
-        std::cout<<"Give path to dictionary:";
+        QTextStream outputStream(stdout);
+        outputStream<<QStringLiteral("Give path to dictionary:");
+        outputStream.flush();
         QTextStream inputStream(stdin);
         path = inputStream.readLine();
         try {
@@ -12,32 +14,35 @@ Menu::Menu()
         } catch (QException &exception) {
             qDebug() << exception.what();
         }
-    } while(dict->getDictionaryToEncode()->isEmpty());
+    }
 }
 
 void Menu::printMenu()
 {
-    std::cout<<"ENCODE <string to be translated>\n";
-    std::cout<<"DECODE <string to be translated>\n";
-    std::cout<<"ENCODE_FILE <path to file to encode> <path to output file>\n";
-    std::cout<<"DECODE_FILE <path to file to decode> <path to output file>\n";
-    std::cout<<"EXIT\n";
+    QTextStream outputStream(stdout);
+    outputStream<<QStringLiteral("ENCODE <string to be translated>\n");
+    outputStream<<QStringLiteral("DECODE <string to be translated>\n");
+    outputStream<<QStringLiteral("ENCODE_FILE <path to file to encode> <path to output file>\n");
+    outputStream<<QStringLiteral("DECODE_FILE <path to file to decode> <path to output file>\n");
+    outputStream<<QStringLiteral("EXIT\n");
 }
 
 bool Menu::getCommand()
 {
-    std::cout<<"Choose: ";
+    QTextStream outputStream(stdout);
+    outputStream<<QStringLiteral("Choose: ");
+    outputStream.flush();
     QTextStream inputStream(stdin);
     QString input;
     input = inputStream.readLine();
     QString cmd = input.section(' ', 0, 0);
     if (cmd == "ENCODE") {
         QString tmp = input.section(' ', 1, -1);
-        std::cout<<dict->encode(tmp).toStdString()<<std::endl;
+        outputStream<<dict->encode(tmp)<<QStringLiteral("\n");
         return true;
     } else if (cmd == "DECODE") {
         QString tmp = input.section(' ', 1, -1);
-        std::cout<<dict->decode(tmp).toStdString()<<std::endl;
+        outputStream<<dict->decode(tmp)<<QStringLiteral("\n");
         return true;
     } else if (cmd == "ENCODE_FILE") {
         QString inPath = input.section(' ', 1, 1);
@@ -52,7 +57,7 @@ bool Menu::getCommand()
     } else if (cmd == "EXIT") {
         return false;
     } else {
-        std::cout<<"Invalid command. Try again.\n";
+        outputStream<<QStringLiteral("Invalid command. Try again.\n");
         return true;
     }
 }
