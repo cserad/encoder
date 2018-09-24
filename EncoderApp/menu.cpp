@@ -3,11 +3,12 @@
 Menu::Menu()
 {
     do {
-        std::string path;
+        QString path;
         std::cout<<"Give path to dictionary:";
-        std::cin>>path;
+        QTextStream inputStream(stdin);
+        path = inputStream.readLine();
         try {
-            dict = new Dictionary(QString::fromStdString(path));
+            dict = new Dictionary(path);
         } catch (QException &exception) {
             qDebug() << exception.what();
         }

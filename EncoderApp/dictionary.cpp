@@ -82,10 +82,16 @@ QString Dictionary::decode(QString input)
 void Dictionary::encode(QString in, QString out)
 {
     QFile inFile(in);
+    if (!inFile.open(QFile::ReadOnly)) {
+        qDebug() << "Couldn't open file.";
+    }
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
-    QString output = encode(input);
+    QString output = encode(input.trimmed());
     QFile outFile(out);
+    if (!outFile.open(QFile::WriteOnly)) {
+        qDebug() << "Couldn't open file.";
+    }
     QTextStream outputStream(&outFile);
     outputStream << output;
 }
@@ -93,10 +99,16 @@ void Dictionary::encode(QString in, QString out)
 void Dictionary::decode(QString in, QString out)
 {
     QFile inFile(in);
+    if (!inFile.open(QFile::ReadOnly)) {
+        qDebug() << "Couldn't open file.";
+    }
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
-    QString output = decode(input);
+    QString output = decode(input.trimmed());
     QFile outFile(out);
+    if (!outFile.open(QFile::WriteOnly)) {
+        qDebug() << "Couldn't open file.";
+    }
     QTextStream outputStream(&outFile);
     outputStream << output;
 }

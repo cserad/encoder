@@ -9,7 +9,7 @@ int main()
     bool run = true;
     while (run) {
         menu->printMenu();
-        menu->getCommand();
+        run = menu->getCommand();
     }
     return 0;
 }
