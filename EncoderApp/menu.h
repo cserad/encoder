@@ -1,16 +1,15 @@
-#ifndef MENU_H
-#define MENU_H
+#pragma once
 
 #include "dictionary.h"
 
 class Menu
 {
-private:
-    Dictionary *dict;
 public:
     Menu();
     void printMenu();
     bool getCommand();
-};
+    void loadDict();
 
-#endif // MENU_H
+private:
+    Dictionary dict;
+};

@@ -2,11 +2,15 @@
 
 int main()
 {
-    Menu *menu = new Menu();
+    Menu menu;
+    menu.loadDict();
+
     bool run = true;
+
     while (run) {
-        menu->printMenu();
-        run = menu->getCommand();
+        menu.printMenu();
+        run = menu.getCommand();
     }
+
     return 0;
 }

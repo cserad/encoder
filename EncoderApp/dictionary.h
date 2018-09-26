@@ -1,22 +1,26 @@
-#ifndef DICTIONARY_H
-#define DICTIONARY_H
+#pragma once
 
-#include <QtCore>
+#include <QString>
+#include <QJsonDocument>
 
 class Dictionary
 {
-private:
-    QJsonDocument *dictionaryToEncode;
-    QJsonDocument *dictionaryToDecode;
 public:
-    Dictionary(QString path);
+    Dictionary();
+    Dictionary(const QString &path);
     ~Dictionary();
-    QJsonDocument *getDictionaryToEncode() const;
-    QJsonDocument *getDictionaryToDecode() const;
-    QString encode(QString input);
-    QString decode(QString input);
-    void encode(QString in, QString out);
-    void decode(QString in, QString out);
-};
 
-#endif // DICTIONARY_H
+    QJsonDocument getDictionary() const;
+    QJsonDocument getReverseDictionary() const;
+
+    QString encode(const QString &input);
+    QString decode(const QString &input);
+    void encodeFile(const int &direction, const QString &in, const QString &out);
+
+public:
+    static bool dictCreated;
+
+private:
+    QJsonDocument dictionary;
+    QJsonDocument reverseDictionary;
+};

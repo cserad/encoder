@@ -1,25 +1,19 @@
 #include "menu.h"
 
+#include "utils.h"
+
+#include <QTextStream>
+#include <QException>
+#include <QDebug>
+
 Menu::Menu()
 {
-    while(dict->getDictionaryToEncode()->isEmpty()) {
-        QString path;
-        QTextStream outputStream(stdout);
-        outputStream<<QStringLiteral("Give path to dictionary:");
-        outputStream.flush();
-        QTextStream inputStream(stdin);
-        path = inputStream.readLine();
-        try {
-            dict = new Dictionary(path);
-        } catch (QException &exception) {
-            qDebug() << exception.what();
-        }
-    }
 }
 
 void Menu::printMenu()
 {
     QTextStream outputStream(stdout);
+
     outputStream<<QStringLiteral("ENCODE <string to be translated>\n");
     outputStream<<QStringLiteral("DECODE <string to be translated>\n");
     outputStream<<QStringLiteral("ENCODE_FILE <path to file to encode> <path to output file>\n");
@@ -30,34 +24,61 @@ void Menu::printMenu()
 bool Menu::getCommand()
 {
     QTextStream outputStream(stdout);
-    outputStream<<QStringLiteral("Choose: ");
-    outputStream.flush();
-    QTextStream inputStream(stdin);
     QString input;
-    input = inputStream.readLine();
+
+    input = Utils::getInput(QStringLiteral("Choose:"));
+
     QString cmd = input.section(' ', 0, 0);
+
     if (cmd == "ENCODE") {
         QString tmp = input.section(' ', 1, -1);
-        outputStream<<dict->encode(tmp)<<QStringLiteral("\n");
+
+        outputStream<<dict.encode(tmp.toLower())<<QStringLiteral("\n");
+
         return true;
+
     } else if (cmd == "DECODE") {
         QString tmp = input.section(' ', 1, -1);
-        outputStream<<dict->decode(tmp)<<QStringLiteral("\n");
+
+        outputStream<<dict.decode(tmp.toLower())<<QStringLiteral("\n");
+
         return true;
+
     } else if (cmd == "ENCODE_FILE") {
         QString inPath = input.section(' ', 1, 1);
         QString outPath = input.section(' ', 2, 2);
-        dict->encode(inPath, outPath);
+
+        dict.encodeFile(0, inPath, outPath);
+
         return true;
+
     } else if (cmd == "DECODE_FILE") {
         QString inPath = input.section(' ', 1, 1);
         QString outPath = input.section(' ', 2, 2);
-        dict->decode(inPath, outPath);
+
+        dict.encodeFile(1, inPath, outPath);
+
         return true;
+
     } else if (cmd == "EXIT") {
         return false;
     } else {
         outputStream<<QStringLiteral("Invalid command. Try again.\n");
+
         return true;
+    }
+}
+
+void Menu::loadDict()
+{
+    while(!dict.dictCreated) {
+        QString path;
+        path = Utils::getInput(QStringLiteral("Give path to dictionary:"));
+
+        try {
+            dict = Dictionary(path);
+        } catch (QException &exception) {
+            qDebug() << exception.what();
+        }
     }
 }

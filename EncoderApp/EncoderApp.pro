@@ -9,8 +9,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     dictionary.cpp \
-    menu.cpp
+    menu.cpp \
+    utils.cpp
 
 HEADERS += \
     dictionary.h \
-    menu.h
+    menu.h \
+    utils.h
