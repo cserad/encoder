@@ -22,6 +22,9 @@ Dictionary::Dictionary(const QString &path)
         }
 
         QByteArray dictData = dictFile.readAll();
+
+        dictFile.close();
+
         dictionary = QJsonDocument(QJsonDocument::fromJson(dictData));
     } catch (QException &exception) {
         qDebug() << exception.what();
@@ -110,6 +113,7 @@ void Dictionary::encodeFile(const int &direction, const QString &in, const QStri
 
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
+    inFile.close();
 
     input = input.toLower().trimmed();
 
@@ -129,4 +133,6 @@ void Dictionary::encodeFile(const int &direction, const QString &in, const QStri
 
     QTextStream outputStream(&outFile);
     outputStream << output;
+
+    outFile.close();
 }
