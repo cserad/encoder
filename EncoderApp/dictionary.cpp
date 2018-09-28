@@ -42,7 +42,7 @@ Dictionary::Dictionary(const QString &path)
     }
 
     try {
-        reverseDictionary = QVariantMap(tmp);
+        reverseDictionary = tmp;
     } catch (QException &exception) {
         qDebug() << exception.what();
     }
@@ -88,7 +88,7 @@ QString Dictionary::decode(const QString &input)
     }
 }
 
-void Dictionary::encodeFile(const int &direction, const QString &in, const QString &out)
+void Dictionary::encodeFile(FileModes mode, const QString &in, const QString &out)
 {
     QFile inFile(in);
 
@@ -104,7 +104,7 @@ void Dictionary::encodeFile(const int &direction, const QString &in, const QStri
 
     QString output;
 
-    if (direction == 0) {
+    if (mode == FileModes::Encode) {
         output = encode(input);
     } else {
         output = decode(input);

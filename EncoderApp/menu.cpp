@@ -48,7 +48,7 @@ bool Menu::getCommand()
         QString inPath = input.section(' ', 1, 1);
         QString outPath = input.section(' ', 2, 2);
 
-        dict.encodeFile(0, inPath, outPath);
+        dict.encodeFile(Dictionary::FileModes::Encode, inPath, outPath);
 
         return true;
 
@@ -56,7 +56,7 @@ bool Menu::getCommand()
         QString inPath = input.section(' ', 1, 1);
         QString outPath = input.section(' ', 2, 2);
 
-        dict.encodeFile(1, inPath, outPath);
+        dict.encodeFile(Dictionary::FileModes::Decode, inPath, outPath);
 
         return true;
 
