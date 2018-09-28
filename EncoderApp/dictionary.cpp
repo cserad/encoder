@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QJsonObject>
+#include <QJsonDocument>
 #include <QException>
 
 bool Dictionary::dictCreated = false;
@@ -22,23 +23,26 @@ Dictionary::Dictionary(const QString &path)
         }
 
         QByteArray dictData = dictFile.readAll();
-        dictionary = QJsonDocument(QJsonDocument::fromJson(dictData));
+        dictFile.close();
+
+        QJsonDocument document = QJsonDocument::fromJson(dictData);
+        dictionary = document.toVariant().toMap();
+
     } catch (QException &exception) {
         qDebug() << exception.what();
     }
 
     //Make the dictionary to decode
 
-    QJsonObject dictToEncodeObject = dictionary.object();
-    QJsonObject dictToDecodeObject = QJsonObject();
+    QVariantMap tmp;
 
-    for (const auto &key : dictToEncodeObject.keys()) {
-        QJsonValue value = dictToEncodeObject.value(key);
-        dictToDecodeObject.insert(value.toString(), key);
+    foreach(const QString &key, dictionary.keys()) {
+        QVariant value = dictionary.value(key);
+        tmp.insert(value.toString(), key);
     }
 
     try {
-        reverseDictionary = QJsonDocument(dictToDecodeObject);
+        reverseDictionary = QVariantMap(tmp);
     } catch (QException &exception) {
         qDebug() << exception.what();
     }
@@ -48,29 +52,15 @@ Dictionary::~Dictionary()
 {
 }
 
-QJsonDocument Dictionary::getDictionary() const
-{
-    return dictionary;
-}
-
-QJsonDocument Dictionary::getReverseDictionary() const
-{
-    return reverseDictionary;
-}
-
 QString Dictionary::encode(const QString &input)
 {
     QString output;
 
-    for (const auto &i : input) {
-        QString actual(i);
-
-        QJsonValue value = dictionary.object().value(actual);
-
-        if (value == QJsonValue::Undefined) {
-            return QString();
+    for (const auto &it : input) {
+        if (dictionary.find(it) != dictionary.end()) {
+            output += dictionary.value(it).toString();
         } else {
-            output += value.toString();
+            return QString();
         }
     }
 
@@ -85,10 +75,8 @@ QString Dictionary::decode(const QString &input)
     for (const auto &i : input) {
         actual.append(i);
 
-        QJsonValue value = reverseDictionary.object().value(actual);
-
-        if (value != QJsonValue::Undefined) {
-            output += value.toString();
+        if (reverseDictionary.find(actual) != reverseDictionary.end()) {
+            output += reverseDictionary.value(actual).toString();
             actual.clear();
         }
     }
@@ -110,6 +98,7 @@ void Dictionary::encodeFile(const int &direction, const QString &in, const QStri
 
     QTextStream inputStream(&inFile);
     QString input = inputStream.readAll();
+    inFile.close();
 
     input = input.toLower().trimmed();
 
@@ -129,4 +118,6 @@ void Dictionary::encodeFile(const int &direction, const QString &in, const QStri
 
     QTextStream outputStream(&outFile);
     outputStream << output;
+
+    outFile.close();
 }

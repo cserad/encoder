@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QString>
-#include <QJsonDocument>
+#include <QVariantMap>
 
 class Dictionary
 {
@@ -9,9 +9,6 @@ public:
     Dictionary();
     Dictionary(const QString &path);
     ~Dictionary();
-
-    QJsonDocument getDictionary() const;
-    QJsonDocument getReverseDictionary() const;
 
     QString encode(const QString &input);
     QString decode(const QString &input);
@@ -21,6 +18,6 @@ public:
     static bool dictCreated;
 
 private:
-    QJsonDocument dictionary;
-    QJsonDocument reverseDictionary;
+    QVariantMap dictionary;
+    QVariantMap reverseDictionary;
 };
